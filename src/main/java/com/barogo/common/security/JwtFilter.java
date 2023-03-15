@@ -28,6 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
       var bearerToken = getBearerToken(header);
       setAuthentication(bearerToken);
     }
+    log.info("Test111111");
     filterChain.doFilter(request, response);
   }
 

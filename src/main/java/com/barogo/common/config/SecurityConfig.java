@@ -29,7 +29,8 @@ public class SecurityConfig {
       "/v2/api-docs",
       "/v3/api-docs/**",
       "/actuator/**",
-      "/auths/**"
+      "/auths/**",
+      "/h2-console/**"
   };
 
   @Bean
@@ -38,11 +39,11 @@ public class SecurityConfig {
         .cors()
         .and().csrf().disable()
         .httpBasic().disable()
-        .authorizeHttpRequests()
-        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        .requestMatchers(permitAllEndpoints).permitAll()
-        .anyRequest().authenticated()
-        .and()
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+            .requestMatchers(permitAllEndpoints).permitAll()
+            .anyRequest().authenticated()
+        )
         .addFilterBefore(new JwtFilter(objectMapper), UsernamePasswordAuthenticationFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //        .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)

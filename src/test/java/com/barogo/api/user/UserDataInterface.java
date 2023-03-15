@@ -10,7 +10,7 @@ public interface UserDataInterface {
     var request = new UserSaveRequest();
     request.setUserId("jaein1234");
     request.setName("ohjaein");
-    request.setPassword("password");
+    request.setPassword("Password1234!@#$11assd");
     request.setEmail("jaein@jaein.com");
     request.setPhone("010-1234-1234");
     return request;
