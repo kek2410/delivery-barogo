@@ -1,7 +1,7 @@
 package com.barogo.api.user.controller;
 
 import com.barogo.api.user.dto.UserSaveRequest;
-import com.barogo.api.user.dto.UserSignInRequest;
+import com.barogo.api.user.dto.UserLoginRequest;
 import com.barogo.api.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class UserController {
     return userService.save(request);
   }
 
-  @GetMapping("/sign-in")
-  public String signIn(UserSignInRequest request) {
-    return userService.signIn(request);
+  @GetMapping("/login")
+  public String login(UserLoginRequest request) {
+    return userService.login(request);
   }
 }

@@ -1,7 +1,7 @@
 package com.barogo.api.user.service;
 
 import com.barogo.api.user.dto.UserSaveRequest;
-import com.barogo.api.user.dto.UserSignInRequest;
+import com.barogo.api.user.dto.UserLoginRequest;
 import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.constant.ErrorCode;
@@ -31,7 +31,7 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public String signIn(UserSignInRequest request) {
+  public String login(UserLoginRequest request) {
     var user = userRepository.findByUserId(request.getId())
         .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
     if (bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {

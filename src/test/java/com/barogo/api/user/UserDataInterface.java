@@ -1,7 +1,7 @@
 package com.barogo.api.user;
 
 import com.barogo.api.user.dto.UserSaveRequest;
-import com.barogo.api.user.dto.UserSignInRequest;
+import com.barogo.api.user.dto.UserLoginRequest;
 import com.barogo.api.user.entity.User;
 
 public interface UserDataInterface {
@@ -26,8 +26,8 @@ public interface UserDataInterface {
         .build();
   }
 
-  default UserSignInRequest userSignInRequest() {
-    var request = new UserSignInRequest();
+  default UserLoginRequest userSignInRequest() {
+    var request = new UserLoginRequest();
     request.setId("jaein1234");
     request.setPassword("password");
     return request;

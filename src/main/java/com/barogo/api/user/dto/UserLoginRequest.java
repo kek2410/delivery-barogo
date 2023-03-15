@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserSignInRequest {
+public class UserLoginRequest {
 
   @NotNull
   private String id;
