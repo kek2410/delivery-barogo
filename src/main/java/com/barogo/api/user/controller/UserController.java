@@ -1,7 +1,7 @@
 package com.barogo.api.user.controller;
 
-import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.dto.UserLoginRequest;
+import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,9 @@
 package com.barogo.api.user.dto;
 
+import com.barogo.common.constant.UserRole;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserDTO implements UserDetails {
 
   private String userId;
+  private UserRole roles;
   private String name;
-  private String referenceId;
   private boolean isDeleted;
   private boolean isLocked;
 
@@ -29,7 +31,7 @@ public class UserDTO implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.emptyList();
+    return this.roles == null ? Collections.emptyList() : List.of(roles);
   }
 
   @Override

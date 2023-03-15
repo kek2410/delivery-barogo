@@ -1,7 +1,7 @@
 package com.barogo.common.config;
 
 import com.barogo.common.security.JwtFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.barogo.common.security.JwtTokenProvider;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,22 +29,22 @@ public class SecurityConfig {
       "/v2/api-docs",
       "/v3/api-docs/**",
       "/actuator/**",
-      "/auths/**",
+      "/users/**",
       "/h2-console/**"
   };
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
     return http
         .cors()
         .and().csrf().disable()
         .httpBasic().disable()
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .requestMatchers(permitAllEndpoints).permitAll()
-            .anyRequest().authenticated()
-        )
-        .addFilterBefore(new JwtFilter(objectMapper), UsernamePasswordAuthenticationFilter.class)
+//        .authorizeHttpRequests(authorize -> authorize
+//            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//            .requestMatchers(permitAllEndpoints).permitAll()
+//            .anyRequest().authenticated()
+//        )
+        .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //        .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 //        .authenticationEntryPoint(customAuthenticationEntryPoint)

@@ -3,6 +3,7 @@ package com.barogo.api.user;
 import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.dto.UserLoginRequest;
 import com.barogo.api.user.entity.User;
+import com.barogo.common.constant.UserRole;
 
 public interface UserDataInterface {
 
@@ -20,9 +21,11 @@ public interface UserDataInterface {
     return User.builder()
         .id(1L)
         .userId("jaein1234")
+        .name("ohjaein")
         .password("test")
         .phone("010-1234-1234")
         .email("jaein@jaein.com")
+        .role(UserRole.CUSTOMER)
         .build();
   }
 

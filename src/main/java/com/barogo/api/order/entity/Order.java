@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table
+@Table(name = "t_order")
 @Entity
 @Getter
 @Builder
@@ -45,6 +46,8 @@ public class Order {
   private String subAddress;
 
   private String zipCode;
+
+  private LocalDateTime deliveryRequestedAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk01_t_order"))
@@ -73,6 +76,7 @@ public class Order {
 
   public void deliveryReady() {
     this.status = OrderStatus.DELIVERY_READY;
+    this.deliveryRequestedAt = LocalDateTime.now();
   }
 
   public boolean canDeliveryRequest() {

@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-  List<Order> findAllByDeliveryDateAfterAndDeliveryDateBefore(LocalDateTime fromDate, LocalDateTime toDate);
+  List<Order> findAllByDeliveryRequestedAtAfterAndDeliveryRequestedAtBefore(LocalDateTime fromDate, LocalDateTime toDate);
 
-  List<Order> findAllByDeliveryDateAfterAndDeliveryDateBeforeAndStatus(LocalDateTime fromDate, LocalDateTime toDate,
+  List<Order> findAllByDeliveryRequestedAtAfterAndDeliveryRequestedAtBeforeAndStatus(LocalDateTime fromDate, LocalDateTime toDate,
       OrderStatus status);
 }

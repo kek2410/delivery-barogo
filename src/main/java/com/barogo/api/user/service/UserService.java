@@ -1,13 +1,16 @@
 package com.barogo.api.user.service;
 
-import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.dto.UserLoginRequest;
+import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.constant.ErrorCode;
+import com.barogo.common.constant.Token;
 import com.barogo.common.exception.APIException;
+import com.barogo.common.security.JwtTokenProvider;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultJwtBuilder;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final JwtTokenProvider jwtTokenProvider;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Transactional
@@ -37,7 +41,7 @@ public class UserService {
     if (bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new APIException(ErrorCode.WRONG_PASSWORD);
     }
-    return getToken(user);
+    return jwtTokenProvider.create(user.getUserId(), user.getRole());
   }
 
   @Transactional(readOnly = true)
@@ -58,13 +62,16 @@ public class UserService {
 
   private String getToken(User user) {
     return new DefaultJwtBuilder()
-        .setHeaderParam("kid", "USER_KEY")
-        .setIssuer("OH_JAE_IN")
+        .setIssuer(Token.ISSUER)
         .setIssuedAt(new Date(Calendar.getInstance().getTimeInMillis()))
         .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + (60 * 60 * 1000)))
-        .setAudience(user.getUserId())
-        .claim("userId", user.getUserId())
-        .signWith(SignatureAlgorithm.RS256, "OH_JAE_IN")
+        .setAudience(Token.AUDIENCE)
+        .claim("id", user.getUserId())
+        .claim("role", user.getRole())
+        .signWith(SignatureAlgorithm.RS256, Token.SECRET_KEY)
         .compact();
+  }
+
+  public static void main(String[] args) {
   }
 }
