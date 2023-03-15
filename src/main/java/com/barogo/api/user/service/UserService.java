@@ -35,7 +35,7 @@ public class UserService {
     var user = userRepository.findByUserId(request.getId())
         .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
     if (bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
-      throw new APIException(ErrorCode.UNMATCHED_PASSWORD);
+      throw new APIException(ErrorCode.WRONG_PASSWORD);
     }
     return getToken(user);
   }

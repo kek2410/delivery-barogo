@@ -1,31 +1,35 @@
 package com.barogo.api.user.dto;
 
-import com.barogo.api.user.entity.User;
+import com.barogo.common.constant.ErrorMessage;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserSaveRequest {
 
-  @NotNull
+  @NotBlank(message = ErrorMessage.MANDATORY)
   private String userId;
-  @NotNull
+  @NotBlank(message = ErrorMessage.MANDATORY)
   private String name;
-  @NotNull
+  @NotBlank(message = ErrorMessage.MANDATORY)
+  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=_!])(?=.*[a-zA-Z\\\\d@#$%^&+=_!]).{12,}$", message = ErrorMessage.INVALID_PASSWORD)
   private String password;
-  @NotNull
-  @Email
+  @NotBlank(message = ErrorMessage.MANDATORY)
+  @Email(message = ErrorMessage.INVALID_EMAIL)
   private String email;
-  @NotNull
-  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "핸드폰 번호의 양식과 맞지 않습니다. 01x-xxx(x)-xxxx")
+  @NotBlank(message = ErrorMessage.MANDATORY)
+  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = ErrorMessage.INVALID_PHONE)
   private String phone;
-
 
 
 }
