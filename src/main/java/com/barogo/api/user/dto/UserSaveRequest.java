@@ -22,7 +22,7 @@ public class UserSaveRequest {
   @NotBlank(message = ErrorMessage.MANDATORY)
   private String name;
   @NotBlank(message = ErrorMessage.MANDATORY)
-  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=_!])(?=.*[a-zA-Z\\\\d@#$%^&+=_!]).{12,}$", message = ErrorMessage.INVALID_PASSWORD)
+  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=_!])(?=.*[a-zA-Z\\d@#$%^&+=_!]).{12,}$", message = ErrorMessage.INVALID_PASSWORD)
   private String password;
   @NotBlank(message = ErrorMessage.MANDATORY)
   @Email(message = ErrorMessage.INVALID_EMAIL)

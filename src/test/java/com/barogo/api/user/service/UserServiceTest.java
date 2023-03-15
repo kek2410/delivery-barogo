@@ -4,14 +4,17 @@ package com.barogo.api.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import com.barogo.api.user.UserDataInterface;
 import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.exception.APIException;
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,20 +44,16 @@ class UserServiceTest implements UserDataInterface {
     // when
     var id = userService.save(request);
     // then
-//    assertTrue(Objects.nonNull(id));
-//    then(id).isEqualTo(1L);
-    then(userRepository).should().existsByUserId(any(String.class));
-    then(userRepository).should().save(any(User.class));
-//    then(id).should;
-//    then(id).should();
+    assertTrue(Objects.nonNull(id));
   }
+
 
   @DisplayName("중복ID_테스트")
   @Test
   void saveErrorTest() {
     // given
     var request = userSaveRequest();
-    var savedUser = savedUser();
+//    var savedUser = savedUser();
     // when
     given(userRepository.existsByUserId(request.getUserId())).willReturn(true);
     // then

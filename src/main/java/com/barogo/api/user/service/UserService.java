@@ -40,6 +40,12 @@ public class UserService {
     return getToken(user);
   }
 
+  @Transactional(readOnly = true)
+  public User getUserByUserId(String userId) {
+    return userRepository.findByUserId(userId)
+        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
+  }
+
   private User convertEntity(UserSaveRequest request) {
     return User.builder()
         .userId(request.getUserId())

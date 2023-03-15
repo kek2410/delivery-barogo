@@ -1,5 +1,6 @@
 package com.barogo.api.delivery.dto;
 
+import com.barogo.api.delivery.code.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,5 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DeliveryResponse {
 
-  private String status;
+  private Long id;
+
+  private DeliveryStatus status;
+
 }
