@@ -9,6 +9,7 @@ import com.barogo.api.order.repository.OrderRepository;
 import com.barogo.api.user.service.UserService;
 import com.barogo.common.constant.ErrorCode;
 import com.barogo.common.exception.APIException;
+import com.barogo.common.exception.NotExistDataException;
 import com.barogo.common.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +47,7 @@ public class OrderService {
 
   @Transactional
   public void update(Long id, OrderSaveRequest request) {
-    var order = orderRepository.findById(id)
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_DATA));
+    var order = orderRepository.findById(id).orElseThrow(NotExistDataException::new);
     if (!order.isUpdatableAddress()) {
       throw new APIException();
     }
@@ -56,8 +56,7 @@ public class OrderService {
 
   @Transactional
   public void paid(Long id) {
-    var order = orderRepository.findById(id)
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_DATA));
+    var order = orderRepository.findById(id).orElseThrow(NotExistDataException::new);
     if (!order.canPaid()) {
       throw new APIException(ErrorCode.INVALID_STATUS_FOR_PAID);
     }
@@ -66,8 +65,7 @@ public class OrderService {
 
   @Transactional
   public void deliveryReady(Long id) {
-    var order = orderRepository.findById(id)
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_DATA));
+    var order = orderRepository.findById(id).orElseThrow(NotExistDataException::new);
     if (!order.canDeliveryReady()) {
       throw new APIException(ErrorCode.INVALID_STATUS_FOR_DELIVERY_READY);
     }
@@ -85,8 +83,7 @@ public class OrderService {
 
   @Transactional
   public void deliveryRequest(Long id) {
-    var order = orderRepository.findById(id)
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_DATA));
+    var order = orderRepository.findById(id).orElseThrow(NotExistDataException::new);
     if (!order.canDeliveryRequest()) {
       throw new APIException(ErrorCode.INVALID_STATUS_FOR_DELIVERY_REQUEST);
     }

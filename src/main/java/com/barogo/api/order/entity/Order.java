@@ -1,5 +1,6 @@
 package com.barogo.api.order.entity;
 
+import com.barogo.api.delivery.code.DeliveryStatus;
 import com.barogo.api.delivery.entity.Delivery;
 import com.barogo.api.order.code.OrderStatus;
 import com.barogo.api.order.dto.OrderResponse;
@@ -75,7 +76,10 @@ public class Order {
   }
 
   public boolean canDeliveryRequest() {
-    return this.status.equals(OrderStatus.DELIVERY_READY);
+    return this.status.equals(OrderStatus.DELIVERY_READY)
+        && this.deliveries.stream()
+        .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.CANCEL))
+        .findAny().isEmpty();
   }
 
   public void deliveryRequestWithDeliver(User delivery) {
