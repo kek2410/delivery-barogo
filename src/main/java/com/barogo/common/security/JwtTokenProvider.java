@@ -53,7 +53,7 @@ public class JwtTokenProvider {
 
   public String resolve(HttpServletRequest request) {
     var header = request.getHeader("Authorization");
-    if (!header.startsWith("Bearer ")) {
+    if (header == null || !header.startsWith("Bearer ")) {
       return null;
     }
     return header.substring(7);
