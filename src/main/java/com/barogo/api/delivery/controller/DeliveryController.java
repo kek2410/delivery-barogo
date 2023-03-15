@@ -1,7 +1,7 @@
-package com.barogo.api.user.delivery.controller;
+package com.barogo.api.delivery.controller;
 
-import com.barogo.api.user.delivery.dto.DeliveryResponse;
-import com.barogo.api.user.delivery.service.DeliveryService;
+import com.barogo.api.delivery.service.DeliveryService;
+import com.barogo.api.delivery.dto.DeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

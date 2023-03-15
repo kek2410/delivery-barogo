@@ -1,4 +1,4 @@
-package com.barogo.api.user.delivery.dto;
+package com.barogo.api.delivery.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

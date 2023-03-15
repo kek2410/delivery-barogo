@@ -1,6 +1,6 @@
-package com.barogo.api.user.delivery.dto;
+package com.barogo.api.delivery.dto;
 
-import com.barogo.api.user.delivery.entity.Delivery;
+import com.barogo.api.delivery.entity.Delivery;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

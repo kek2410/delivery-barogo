@@ -1,6 +1,5 @@
-package com.barogo.api.user.delivery.entity;
+package com.barogo.api.order.entity;
 
-import com.barogo.api.user.delivery.dto.DeliveryResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,18 +18,11 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Delivery {
+public class Order {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String status;
-
-
-  public DeliveryResponse toResponse() {
-    return DeliveryResponse.builder()
-        .status(status)
-        .build();
-  }
+  private Long userId;
 }
