@@ -1,19 +1,22 @@
 package com.barogo.api.user.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.barogo.AbstractControllerTest;
 import com.barogo.api.user.UserDataInterface;
+import com.barogo.api.user.dto.UserLoginRequest;
 import com.barogo.api.user.service.UserService;
+import com.barogo.common.constant.ErrorCode;
+import com.barogo.common.constant.ErrorMessage;
+import com.barogo.common.exception.APIException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 
-@WithMockUser
 @WebMvcTest(UserController.class)
 @DisplayName("사용자 컨트롤러")
 class UserControllerTest extends AbstractControllerTest implements UserDataInterface {
@@ -28,14 +31,14 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   void saveUser() throws Exception {
     // given
     var request = userSaveRequest();
-    given(userService.save(request)).willReturn(1L);
+    given(userService.save(any())).willReturn(1L);
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
-        .queryParams(convertParam(request)));
+        .queryParams(map(request)));
     // then
-    perform.andExpect(IS_CREATED)
-        .andExpect(result("0"));
+    perform.andExpect(STATUS_IS_CREATED)
+        .andExpect(result("1"));
   }
 
   @DisplayName("사용자 등록 실패1")
@@ -47,33 +50,63 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
-        .queryParams(convertParam(request)));
+        .queryParams(map(request)));
     // then
-    perform.andExpect(IS_BAD_REQUEST);
+    perform.andExpect(STATUS_IS_BAD_REQUEST);
   }
 
-  @DisplayName("인증실패")
+  @DisplayName("로그인 실패 ID 없음")
   @Test
-  void unauthorized() {
+  void notExistUser() throws Exception {
     // given
-
+    var request = new UserLoginRequest();
+    request.setId("ohjaein");
+    request.setPassword("test");
+    given(userService.login(any())).willThrow(new APIException(ErrorCode.NOT_EXIST_USER));
     // when
-
-    // the
+    var perform = mvc.perform(get(BASE_URL + "/login")
+        .contentType(CONTENT_TYPE)
+        .queryParams(map(request)));
+    // then
+    perform
+        .andExpect(STATUS_IS_UNPROCESSABLE_ENTITY)
+        .andExpect(result(ErrorMessage.NOT_EXIST_USER));
   }
 
-  @DisplayName("사용자 토큰 발행")
+  @DisplayName("로그인 실패 비밀번호 틀림.")
+  @Test
+  void wrongPassword() throws Exception {
+    // given
+    var request = new UserLoginRequest();
+    request.setId("ohjaein");
+    request.setPassword("test");
+    given(userService.login(any())).willThrow(new APIException(ErrorCode.WRONG_PASSWORD));
+    // when
+    var perform = mvc.perform(get(BASE_URL + "/login")
+        .contentType(CONTENT_TYPE)
+        .queryParams(map(request)));
+    // then
+    perform
+        .andExpect(STATUS_IS_UNPROCESSABLE_ENTITY)
+        .andExpect(result(ErrorMessage.WRONG_PASSWORD));
+  }
+
+  @DisplayName("로그인 성공")
   @Test
   void findUserById() throws Exception {
     // given
-
+    var request = new UserLoginRequest();
+    request.setId("ohjaein");
+    request.setPassword("test");
+    given(userService.login(any())).willReturn("testToken");
     // when
-
+    var perform = mvc.perform(get(BASE_URL + "/login")
+        .contentType(CONTENT_TYPE)
+        .queryParams(map(request)));
     // then
-    mvc.perform(get(BASE_URL + "/sign-in"))
-        .andExpect(IS_OK)
-        .andReturn();
-
+    perform
+        .andExpect(STATUS_IS_OK)
+        .andExpect(result("testToken"));
   }
 
 }

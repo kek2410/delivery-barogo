@@ -6,12 +6,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.barogo.common.config.SecurityConfig;
+import com.barogo.common.security.JwtTokenProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,14 +37,17 @@ public abstract class AbstractControllerTest {
 
   protected ObjectMapper objectMapper = new ObjectMapper();
 
+  @MockBean
+  protected JwtTokenProvider jwtTokenProvider;
+
   private final static JsonPathResultMatchers PATH = jsonPath("$.status.code");
 
   public final static MediaType CONTENT_TYPE = MediaType.APPLICATION_JSON;
-  public final static ResultMatcher IS_OK = status().isOk();
-  public final static ResultMatcher IS_CREATED = status().isCreated();
-  public final static ResultMatcher IS_BAD_REQUEST = status().isBadRequest();
-  public final static ResultMatcher IS_UNAUTHORIZED = status().isUnauthorized();
-  public final static ResultMatcher IS_UNPROCESSABLE_ENTITY = status().isUnprocessableEntity();
+  public final static ResultMatcher STATUS_IS_OK = status().isOk();
+  public final static ResultMatcher STATUS_IS_CREATED = status().isCreated();
+  public final static ResultMatcher STATUS_IS_BAD_REQUEST = status().isBadRequest();
+  public final static ResultMatcher STATUS_IS_UNAUTHORIZED = status().isUnauthorized();
+  public final static ResultMatcher STATUS_IS_UNPROCESSABLE_ENTITY = status().isUnprocessableEntity();
 
   @BeforeEach
   public void setUp() {
@@ -52,15 +57,15 @@ public abstract class AbstractControllerTest {
         .build();
   }
 
-  protected final String json(Object value) throws JsonProcessingException {
-    return objectMapper.writeValueAsString(value);
+  protected final ResultMatcher resultJson(Object value) throws JsonProcessingException {
+    return content().json(objectMapper.writeValueAsString(value));
   }
 
   protected final ResultMatcher result(String value) {
-    return content().json(value);
+    return content().string(value);
   }
 
-  protected final MultiValueMap<String, String> convertParam(Object condition) {
+  protected final MultiValueMap<String, String> map(Object condition) {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     Map<String, String> param = objectMapper.convertValue(condition, new TypeReference<>() {});
     map.setAll(param);
