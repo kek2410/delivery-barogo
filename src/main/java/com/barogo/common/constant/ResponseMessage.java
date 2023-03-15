@@ -1,13 +1,13 @@
 package com.barogo.common.constant;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Builder
+@RequiredArgsConstructor
 public enum ResponseMessage {
 
-  CREATED(),
+  CREATED("정상적으로 생성되었습니다."),
   ;
 
   private final String message;

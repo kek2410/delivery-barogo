@@ -6,6 +6,10 @@ import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.constant.ErrorCode;
 import com.barogo.common.exception.APIException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultJwtBuilder;
+import java.util.Calendar;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,13 +32,12 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public String signIn(UserSignInRequest request) {
-    var password = userRepository.findByUserId(request.getId())
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER))
-        .getPassword();
-    if (bCryptPasswordEncoder.matches(request.getPassword(), password)) {
+    var user = userRepository.findByUserId(request.getId())
+        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
+    if (bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new APIException(ErrorCode.UNMATCHED_PASSWORD);
     }
-    return "";
+    return getToken(user);
   }
 
   private User convertEntity(UserSaveRequest request) {
@@ -45,5 +48,17 @@ public class UserService {
         .email(request.getEmail())
         .phone(request.getPhone())
         .build();
+  }
+
+  private String getToken(User user) {
+    return new DefaultJwtBuilder()
+        .setHeaderParam("kid", "USER_KEY")
+        .setIssuer("OH_JAE_IN")
+        .setIssuedAt(new Date(Calendar.getInstance().getTimeInMillis()))
+        .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + (60 * 60 * 1000)))
+        .setAudience(user.getUserId())
+        .claim("userId", user.getUserId())
+        .signWith(SignatureAlgorithm.RS256, "OH_JAE_IN")
+        .compact();
   }
 }
