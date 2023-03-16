@@ -1,11 +1,11 @@
 package com.barogo.api.order.entity;
 
-import com.barogo.api.delivery.code.DeliveryStatus;
 import com.barogo.api.delivery.entity.Delivery;
 import com.barogo.api.order.code.OrderStatus;
 import com.barogo.api.order.dto.OrderResponse;
 import com.barogo.api.order.dto.OrderSaveRequest;
 import com.barogo.api.user.entity.User;
+import com.barogo.common.database.Audit;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -14,25 +14,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "t_order")
 @Entity
 @Getter
-@Builder
 @ToString
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class Order extends Audit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,10 +52,8 @@ public class Order {
   @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk01_t_order"))
   private User user;
 
-  @OneToMany
-  @Builder.Default
-  private List<Delivery> deliveries = new ArrayList<>();
-
+  @OneToOne
+  private Delivery delivery;
 
   public boolean isUpdatableAddress() {
     return OrderStatus.updatableStatus().contains(this.status);
@@ -81,23 +78,22 @@ public class Order {
 
   public boolean canDeliveryRequest() {
     return this.status.equals(OrderStatus.DELIVERY_READY)
-        && this.deliveries.stream()
-        .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.CANCEL))
-        .findAny().isEmpty();
+        && (this.delivery != null && this.delivery.canChangeAddress());
   }
 
   public void deliveryRequestWithDeliver(User delivery) {
     this.status = OrderStatus.DELIVERY_REQUESTED;
-    this.deliveries.add(Delivery.builder()
+    this.delivery = Delivery.builder()
         .deliver(delivery)
         .order(this)
-        .build());
+        .build();
   }
 
   public void update(OrderSaveRequest request) {
     this.address = request.getAddress();
+    this.subAddress = request.getSubAddress();
+    this.zipCode = request.getZipCode();
   }
-
 
   public OrderResponse toResponse() {
     return OrderResponse.builder()

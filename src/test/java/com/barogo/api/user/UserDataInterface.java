@@ -1,20 +1,21 @@
 package com.barogo.api.user;
 
-import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.dto.UserLoginRequest;
+import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.entity.User;
 import com.barogo.common.constant.UserRole;
 
 public interface UserDataInterface {
 
   default UserSaveRequest userSaveRequest() {
-    var request = new UserSaveRequest();
-    request.setUserId("jaein1234");
-    request.setName("ohjaein");
-    request.setPassword("Password1234!@#$11assd");
-    request.setEmail("jaein@jaein.com");
-    request.setPhone("010-1234-1234");
-    return request;
+    return UserSaveRequest.builder()
+        .userId("jaein1234")
+        .name("ohjaein")
+        .password("Password1234!@#$")
+        .email("jaein@jaein.com")
+        .phone("010-1234-1234")
+        .role(UserRole.ADMIN)
+        .build();
   }
 
   default User savedUser() {
@@ -29,10 +30,10 @@ public interface UserDataInterface {
         .build();
   }
 
-  default UserLoginRequest userSignInRequest() {
-    var request = new UserLoginRequest();
-    request.setUserId("jaein1234");
-    request.setPassword("password");
-    return request;
+  default UserLoginRequest userLoginRequest() {
+    return UserLoginRequest.builder()
+        .userId("jaein1234")
+        .password("password")
+        .build();
   }
 }

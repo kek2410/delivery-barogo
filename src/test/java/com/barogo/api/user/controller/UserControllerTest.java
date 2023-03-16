@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.barogo.AbstractControllerTest;
 import com.barogo.api.user.UserDataInterface;
 import com.barogo.api.user.dto.UserLoginRequest;
+import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.service.UserService;
 import com.barogo.common.constant.ErrorCode;
 import com.barogo.common.constant.ErrorMessage;
@@ -31,7 +32,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   void saveUser() throws Exception {
     // given
     var request = userSaveRequest();
-    given(userService.save(any())).willReturn(1L);
+    given(userService.save(any(UserSaveRequest.class))).willReturn(1L);
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
@@ -45,8 +46,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   @Test
   void saveFailed() throws Exception {
     // given
-    var request = userSaveRequest();
-    request.setPassword(null);
+    var request = new UserSaveRequest();
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
@@ -59,10 +59,9 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   @Test
   void notExistUser() throws Exception {
     // given
-    var request = new UserLoginRequest();
-    request.setUserId("ohjaein");
-    request.setPassword("test");
-    given(userService.login(any())).willThrow(new APIException(ErrorCode.NOT_EXIST_USER));
+    var request = userLoginRequest();
+    given(userService.login(any(UserLoginRequest.class)))
+        .willThrow(new APIException(ErrorCode.NOT_EXIST_USER));
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")
         .contentType(CONTENT_TYPE)
@@ -77,10 +76,9 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   @Test
   void wrongPassword() throws Exception {
     // given
-    var request = new UserLoginRequest();
-    request.setUserId("ohjaein");
-    request.setPassword("test");
-    given(userService.login(any())).willThrow(new APIException(ErrorCode.WRONG_PASSWORD));
+    var request = userLoginRequest();
+    given(userService.login(any(UserLoginRequest.class)))
+        .willThrow(new APIException(ErrorCode.WRONG_PASSWORD));
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")
         .contentType(CONTENT_TYPE)
@@ -95,9 +93,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   @Test
   void findUserById() throws Exception {
     // given
-    var request = new UserLoginRequest();
-    request.setUserId("ohjaein");
-    request.setPassword("test");
+    var request = userLoginRequest();
     given(userService.login(any())).willReturn("testToken");
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")

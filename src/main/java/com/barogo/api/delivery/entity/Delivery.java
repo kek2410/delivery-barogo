@@ -4,6 +4,7 @@ import com.barogo.api.delivery.code.DeliveryStatus;
 import com.barogo.api.delivery.dto.DeliveryResponse;
 import com.barogo.api.order.entity.Order;
 import com.barogo.api.user.entity.User;
+import com.barogo.common.database.Audit;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,22 +21,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "t_delivery")
 @Entity
 @Getter
-@Builder
 @ToString
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Delivery {
+public class Delivery extends Audit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  private DeliveryStatus status;
+  @Builder.Default
+  private DeliveryStatus status = DeliveryStatus.READY;
 
   @OneToOne
   @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk01_t_deliver"))

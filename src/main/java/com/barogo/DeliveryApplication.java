@@ -1,10 +1,12 @@
 package com.barogo;
 
+import com.barogo.api.order.code.OrderStatus;
 import com.barogo.api.order.entity.Order;
 import com.barogo.api.order.repository.OrderRepository;
 import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.constant.UserRole;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -63,12 +65,38 @@ public class DeliveryApplication {
             .address("서울시 송파구 잠실동 어딘가123로")
             .subAddress("가로등옆")
             .zipCode("51231")
+            .status(OrderStatus.ORDERED)
             .build(),
         Order.builder()
             .user(user)
             .address("서울시 강남구 청담동 비싼동네123로")
             .subAddress("아파트옆 두번째 골목길")
             .zipCode("12345")
+            .status(OrderStatus.PAID)
+            .build(),
+        Order.builder()
+            .user(user)
+            .address("서울시 강남구 청담동 적당히비싼동네1")
+            .subAddress("아파트옆 세번째 골목길")
+            .zipCode("12345")
+            .status(OrderStatus.DELIVERY_REQUESTED)
+            .deliveryRequestedAt(LocalDateTime.now().minusDays(2L))
+            .build(),
+        Order.builder()
+            .user(user)
+            .address("서울시 강남구 청담동 적당히매우비싼동네2")
+            .subAddress("아파트옆 다섯번째 골목길")
+            .zipCode("12345")
+            .status(OrderStatus.DELIVERY_REQUESTED)
+            .deliveryRequestedAt(LocalDateTime.now())
+            .build(),
+        Order.builder()
+            .user(user)
+            .address("서울시 강남구 청담동 아주많이비싼동네")
+            .subAddress("아파트옆 첫번째 골목길")
+            .zipCode("12345")
+            .status(OrderStatus.DELIVERY_REQUESTED)
+            .deliveryRequestedAt(LocalDateTime.now().minusWeeks(1L))
             .build()
     );
   }

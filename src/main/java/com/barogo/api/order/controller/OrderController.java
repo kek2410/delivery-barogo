@@ -7,6 +7,7 @@ import com.barogo.api.order.service.OrderService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,7 @@ public class OrderController {
     orderService.deliveryReady(id);
   }
 
+  @PreAuthorize("hasRole('DELIVER')")
   @GetMapping("/delivery-ready")
   public List<OrderResponse> deliveryReadyList(@Valid OrderSearchRequest request) {
     return orderService.deliveryReadyList(request);

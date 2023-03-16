@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@PreAuthorize("hasRole('DELIVER')")
 @RestController
 @RequestMapping("/deliveries")
 @RequiredArgsConstructor

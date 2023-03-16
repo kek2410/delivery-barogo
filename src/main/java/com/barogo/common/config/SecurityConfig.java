@@ -33,9 +33,11 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
     return http
-        .cors()
+        .headers().frameOptions().disable()
+        .and().cors()
         .and().csrf().disable()
         .httpBasic().disable()
+
 //        .authorizeHttpRequests(authorize -> authorize
 //            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //            .requestMatchers(permitAllEndpoints).permitAll()

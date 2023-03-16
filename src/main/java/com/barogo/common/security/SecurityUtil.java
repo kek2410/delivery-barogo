@@ -1,9 +1,7 @@
 package com.barogo.common.security;
 
 import com.barogo.api.user.dto.UserDTO;
-import com.barogo.common.constant.ErrorCode;
-import com.barogo.common.exception.APIException;
-import java.util.Objects;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,15 +18,15 @@ public class SecurityUtil {
   }
 
   public static UserDTO getCustomAuthentication() {
-    return (UserDTO) getAuthentication().getPrincipal();
+    var auth = getAuthentication();
+    if (auth.isEmpty()) {
+      return UserDTO.empty();
+    }
+    return (UserDTO) auth.get().getPrincipal();
   }
 
-  public static Authentication getAuthentication() {
-    var auth = SecurityContextHolder.getContext().getAuthentication();
-    if (Objects.isNull(auth)) {
-      throw new APIException(ErrorCode.NOT_EXIST_USER);
-    }
-    return auth;
+  public static Optional<Authentication> getAuthentication() {
+    return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
   }
 
 }

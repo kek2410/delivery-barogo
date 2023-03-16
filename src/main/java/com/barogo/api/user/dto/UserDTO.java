@@ -64,4 +64,8 @@ public class UserDTO implements UserDetails {
     return !this.isDeleted;
   }
 
+  public static UserDTO empty() {
+    return UserDTO.builder().build();
+  }
+
 }

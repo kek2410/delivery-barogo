@@ -13,8 +13,8 @@ import lombok.ToString;
 public class OrderSearchRequest {
 
   @NotNull(message = ErrorMessage.MANDATORY)
-  private LocalDateTime fromDate;
+  private LocalDateTime fromDateTime;
 
   @NotNull(message = ErrorMessage.MANDATORY)
-  private LocalDateTime toDate;
+  private LocalDateTime toDateTime;
 }
