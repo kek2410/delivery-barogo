@@ -7,9 +7,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Calendar;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,19 +20,19 @@ import org.springframework.util.StringUtils;
 public class JwtTokenProvider {
 
   // JWT 토큰 생성
-  public String create(String userId, UserRole roles) {
+  public String create(String userId, UserRole role) {
+    long time = System.currentTimeMillis();
     return Jwts.builder()
-        .setIssuer(Token.ISSUER)
-        .setAudience(Token.AUDIENCE)
-        .setClaims(Map.of("id", userId, "role", roles))
+        .setHeaderParam("typ", "JWT")
         .setSubject(userId)
-        .setIssuedAt(new Date(Calendar.getInstance().getTimeInMillis()))
-        .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + (Token.TOKEN_EXPIRED_AT)))
-        .signWith(SignatureAlgorithm.RS256, Token.SECRET_KEY)
+        .claim("userId", userId)
+        .claim("role", role)
+        .setIssuedAt(new Date(time))
+        .setExpiration(new Date(time + Token.TOKEN_EXPIRED_AT))
+        .signWith(SignatureAlgorithm.HS256, Token.SECRET_KEY.getBytes(StandardCharsets.UTF_8))
         .compact();
   }
 
-  // JWT 토큰에서 인증 정보 조회
   public Authentication getAuthentication(String token) {
     var claims = getClaims(token);
     var userDetails = UserDTO.builder()
@@ -52,11 +51,7 @@ public class JwtTokenProvider {
   }
 
   public String resolve(HttpServletRequest request) {
-    var header = request.getHeader("Authorization");
-    if (header == null || !header.startsWith("Bearer ")) {
-      return null;
-    }
-    return header.substring(7);
+    return request.getHeader("Authorization");
   }
 
   public boolean validate(String jwtToken) {

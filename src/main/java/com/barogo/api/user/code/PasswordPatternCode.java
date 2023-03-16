@@ -1,5 +1,6 @@
 package com.barogo.api.user.code;
 
+import java.util.regex.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,15 +8,15 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PasswordPatternCode {
 
-  SMALL("^[a-z]*"),
-  LARGE("^[A-Z]*"),
-  NUMBER("^\\d*"),
-  EXTRA("^[~!@#$%^&*()-_=+\\|\\[\\]{};:'\",.<>/?]*"),
+  SMALL(Pattern.compile(".*[a-z].*")),
+  LARGE(Pattern.compile(".*[A-Z].*")),
+  NUMBER(Pattern.compile(".*\\d.*")),
+  EXTRA(Pattern.compile(".*[~!@#$%^&*()-_=+|\\[\\]{};:'\",.<>/?].*")),
   ;
 
-  private final String reg;
+  private final Pattern pattern;
 
   public int matched(String text) {
-    return text.matches(this.reg) ? 1 : 0;
+    return this.pattern.matcher(text).matches() ? 1 : 0;
   }
 }

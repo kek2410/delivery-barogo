@@ -31,7 +31,7 @@ public interface UserDataInterface {
 
   default UserLoginRequest userSignInRequest() {
     var request = new UserLoginRequest();
-    request.setId("jaein1234");
+    request.setUserId("jaein1234");
     request.setPassword("password");
     return request;
   }

@@ -60,7 +60,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   void notExistUser() throws Exception {
     // given
     var request = new UserLoginRequest();
-    request.setId("ohjaein");
+    request.setUserId("ohjaein");
     request.setPassword("test");
     given(userService.login(any())).willThrow(new APIException(ErrorCode.NOT_EXIST_USER));
     // when
@@ -78,7 +78,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   void wrongPassword() throws Exception {
     // given
     var request = new UserLoginRequest();
-    request.setId("ohjaein");
+    request.setUserId("ohjaein");
     request.setPassword("test");
     given(userService.login(any())).willThrow(new APIException(ErrorCode.WRONG_PASSWORD));
     // when
@@ -96,7 +96,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   void findUserById() throws Exception {
     // given
     var request = new UserLoginRequest();
-    request.setId("ohjaein");
+    request.setUserId("ohjaein");
     request.setPassword("test");
     given(userService.login(any())).willReturn("testToken");
     // when

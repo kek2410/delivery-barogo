@@ -4,55 +4,21 @@
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>
-        [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} %clr(%5p): %clr(${PID:- }){magenta} %clr([%X{traceId:-},%X{spanId:-}]){yellow} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx
+        [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} %clr(%5p): %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx
       </pattern>
     </encoder>
   </appender>
 
-  <appender name="k8s" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>
-        [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} %clr(%5p): %clr(${PID:- }){magenta} %clr([%X{traceId:-},%X{spanId:-}]){yellow} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx
-      </pattern>
-    </encoder>
-  </appender>
-
-  <logger name="jdbc" level="OFF"/>
-  <logger name="jdbc.sqlonly" level="OFF"/>
-  <logger name="jdbc.audit" level="OFF"/>
-  <logger name="jdbc.resultset" level="OFF"/>
-  <logger name="jdbc.connection" level="OFF"/>
+  <logger name="jdbc.resultsettable" level="DEBUG" />
+  <logger name="jdbc.sqltiming" level="DEBUG" />
+  <logger name="jdbc.resultset" level="OFF" />
+  <logger name="jdbc.sqlonly" level="OFF" />
+  <logger name="jdbc.audit" level="OFF" />
+  <logger name="jdbc.connection" level="OFF" />
   <logger name="org.springframework" level="INFO"/>
-  <logger name="kr.texture.bread" level="DEBUG"/>
-  <logger name="reactor.netty.http.client" level="INFO"/>
 
-  <!-- 로컬 환경 -->
-  <springProfile name="local">
-    <logger name="jdbc.sqltiming" level="DEBUG"/>
-    <logger name="jdbc.resultsettable" level="DEBUG"/>
+  <root level="INFO">
+    <appender-ref ref="console"/>
+  </root>
 
-    <root level="INFO">
-      <appender-ref ref="console"/>
-    </root>
-  </springProfile>
-
-  <!-- 개발 환경 -->
-  <springProfile name="dev">
-    <logger name="jdbc.sqltiming" level="DEBUG"/>
-    <logger name="jdbc.resultsettable" level="DEBUG"/>
-
-    <root level="INFO">
-      <appender-ref ref="k8s"/>
-    </root>
-  </springProfile>
-
-  <!-- 운영 환경 -->
-  <springProfile name="prod">
-    <logger name="jdbc.sqltiming" level="DEBUG"/>
-    <logger name="jdbc.resultsettable" level="DEBUG"/>
-
-    <root level="ERROR">
-      <appender-ref ref="k8s"/>
-    </root>
-  </springProfile>
 </configuration>

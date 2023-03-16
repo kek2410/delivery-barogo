@@ -5,19 +5,15 @@ import com.barogo.api.user.dto.UserSaveRequest;
 import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.constant.ErrorCode;
-import com.barogo.common.constant.Token;
 import com.barogo.common.exception.APIException;
 import com.barogo.common.security.JwtTokenProvider;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.DefaultJwtBuilder;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -36,9 +32,9 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public String login(UserLoginRequest request) {
-    var user = userRepository.findByUserId(request.getId())
+    var user = userRepository.findByUserId(request.getUserId())
         .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
-    if (bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
+    if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new APIException(ErrorCode.WRONG_PASSWORD);
     }
     return jwtTokenProvider.create(user.getUserId(), user.getRole());
@@ -57,21 +53,7 @@ public class UserService {
         .password(bCryptPasswordEncoder.encode(request.getPassword()))
         .email(request.getEmail())
         .phone(request.getPhone())
+        .role(request.getRole())
         .build();
-  }
-
-  private String getToken(User user) {
-    return new DefaultJwtBuilder()
-        .setIssuer(Token.ISSUER)
-        .setIssuedAt(new Date(Calendar.getInstance().getTimeInMillis()))
-        .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + (60 * 60 * 1000)))
-        .setAudience(Token.AUDIENCE)
-        .claim("id", user.getUserId())
-        .claim("role", user.getRole())
-        .signWith(SignatureAlgorithm.RS256, Token.SECRET_KEY)
-        .compact();
-  }
-
-  public static void main(String[] args) {
   }
 }
