@@ -1,5 +1,6 @@
 package com.barogo.api.user.dto;
 
+import com.barogo.api.user.validator.PasswordPattern;
 import com.barogo.common.constant.ErrorMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +23,7 @@ public class UserSaveRequest {
   @NotBlank(message = ErrorMessage.MANDATORY)
   private String name;
   @NotBlank(message = ErrorMessage.MANDATORY)
-  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=_!])(?=.*[a-zA-Z\\d@#$%^&+=_!]).{12,}$", message = ErrorMessage.INVALID_PASSWORD)
+  @PasswordPattern
   private String password;
   @NotBlank(message = ErrorMessage.MANDATORY)
   @Email(message = ErrorMessage.INVALID_EMAIL)
@@ -30,6 +31,5 @@ public class UserSaveRequest {
   @NotBlank(message = ErrorMessage.MANDATORY)
   @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = ErrorMessage.INVALID_PHONE)
   private String phone;
-
 
 }
