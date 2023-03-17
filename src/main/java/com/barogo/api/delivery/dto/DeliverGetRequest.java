@@ -3,18 +3,11 @@ package com.barogo.api.delivery.dto;
 import com.barogo.common.constant.ErrorMessage;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
 
-@Getter
-@Setter
-@ToString
-public class DeliverGetRequest {
-
-  @NotNull(message = ErrorMessage.MANDATORY)
-  private LocalDateTime fromDate;
-
-  @NotNull(message = ErrorMessage.MANDATORY)
-  private LocalDateTime toDate;
-}
+@Builder
+public record DeliverGetRequest(
+    @NotNull(message = ErrorMessage.MANDATORY)
+    LocalDateTime fromDate,
+    @NotNull(message = ErrorMessage.MANDATORY)
+    LocalDateTime toDate) {}

@@ -4,26 +4,17 @@ import com.barogo.common.constant.UserRole;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
 @Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDTO implements UserDetails {
-
-  private String userId;
-  private UserRole roles;
-  private String name;
-  private boolean isDeleted;
-  private boolean isLocked;
+public record UserDTO(
+    String userId,
+    UserRole roles,
+    String name,
+    boolean isDeleted,
+    boolean isLocked) implements UserDetails {
 
   public String getAuditor() {
     return this.userId;

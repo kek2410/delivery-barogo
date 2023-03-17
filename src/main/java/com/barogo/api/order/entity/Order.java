@@ -90,9 +90,9 @@ public class Order extends Audit {
   }
 
   public void update(OrderSaveRequest request) {
-    this.address = request.getAddress();
-    this.subAddress = request.getSubAddress();
-    this.zipCode = request.getZipCode();
+    this.address = request.address();
+    this.subAddress = request.subAddress();
+    this.zipCode = request.zipCode();
   }
 
   public OrderResponse toResponse() {

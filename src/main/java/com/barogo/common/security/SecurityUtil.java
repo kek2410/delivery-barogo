@@ -14,7 +14,7 @@ public class SecurityUtil {
   }
 
   public static String getUserId() {
-    return getCustomAuthentication().getUserId();
+    return getCustomAuthentication().userId();
   }
 
   public static UserDTO getCustomAuthentication() {

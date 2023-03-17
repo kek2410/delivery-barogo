@@ -7,11 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 
 import com.barogo.api.user.UserDataInterface;
-import com.barogo.api.user.entity.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.barogo.common.exception.APIException;
 import java.util.Objects;
@@ -39,7 +36,7 @@ class UserServiceTest implements UserDataInterface {
   void saveUser() {
     // given
     var request = userSaveRequest();
-    given(userRepository.existsByUserId(request.getUserId())).willReturn(false);
+    given(userRepository.existsByUserId(request.userId())).willReturn(false);
     given(userRepository.save(any())).willReturn(savedUser());
     // when
     var id = userService.save(request);
@@ -55,7 +52,7 @@ class UserServiceTest implements UserDataInterface {
     var request = userSaveRequest();
 //    var savedUser = savedUser();
     // when
-    given(userRepository.existsByUserId(request.getUserId())).willReturn(true);
+    given(userRepository.existsByUserId(request.userId())).willReturn(true);
     // then
     var exception = assertThrows(APIException.class, () -> userService.save(request));
     assertEquals("동일한 ID가 존재합니다.", exception.getMessage());

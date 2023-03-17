@@ -46,7 +46,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
   @Test
   void saveFailed() throws Exception {
     // given
-    var request = new UserSaveRequest();
+    var request = UserSaveRequest.builder().build();
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)

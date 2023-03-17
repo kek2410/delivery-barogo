@@ -7,35 +7,23 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
 @Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserSaveRequest {
-
-  @NotBlank(message = ErrorMessage.MANDATORY)
-  private String userId;
-  @NotBlank(message = ErrorMessage.MANDATORY)
-  private String name;
-  @NotBlank(message = ErrorMessage.MANDATORY)
-  @PasswordPattern
-  private String password;
-  @NotBlank(message = ErrorMessage.MANDATORY)
-  @Email(message = ErrorMessage.INVALID_EMAIL)
-  private String email;
-  @NotBlank(message = ErrorMessage.MANDATORY)
-  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = ErrorMessage.INVALID_PHONE)
-  private String phone;
-  @NotNull(message = ErrorMessage.MANDATORY)
-  private UserRole role;
-
-}
+public record UserSaveRequest(
+    @NotBlank(message = ErrorMessage.MANDATORY)
+    String userId,
+    @NotBlank(message = ErrorMessage.MANDATORY)
+    String name,
+    @NotBlank(message = ErrorMessage.MANDATORY)
+    @PasswordPattern
+    String password,
+    @NotBlank(message = ErrorMessage.MANDATORY)
+    @Email(message = ErrorMessage.INVALID_EMAIL)
+    String email,
+    @NotBlank(message = ErrorMessage.MANDATORY)
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = ErrorMessage.INVALID_PHONE)
+    String phone,
+    @NotNull(message = ErrorMessage.MANDATORY)
+    UserRole role
+) {}

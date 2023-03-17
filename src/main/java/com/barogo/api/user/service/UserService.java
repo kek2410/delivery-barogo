@@ -24,7 +24,7 @@ public class UserService {
 
   @Transactional
   public Long save(UserSaveRequest request) {
-    if (userRepository.existsByUserId(request.getUserId())) {
+    if (userRepository.existsByUserId(request.userId())) {
       throw new APIException(ErrorCode.EXIST_USER);
     }
     return userRepository.save(convertEntity(request)).getId();
@@ -32,9 +32,9 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public String login(UserLoginRequest request) {
-    var user = userRepository.findByUserId(request.getUserId())
+    var user = userRepository.findByUserId(request.userId())
         .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER));
-    if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
+    if (!bCryptPasswordEncoder.matches(request.password(), user.getPassword())) {
       throw new APIException(ErrorCode.WRONG_PASSWORD);
     }
     return jwtTokenProvider.create(user.getUserId(), user.getRole());
@@ -48,12 +48,12 @@ public class UserService {
 
   private User convertEntity(UserSaveRequest request) {
     return User.builder()
-        .userId(request.getUserId())
-        .name(request.getName())
-        .password(bCryptPasswordEncoder.encode(request.getPassword()))
-        .email(request.getEmail())
-        .phone(request.getPhone())
-        .role(request.getRole())
+        .userId(request.userId())
+        .name(request.name())
+        .password(bCryptPasswordEncoder.encode(request.password()))
+        .email(request.email())
+        .phone(request.phone())
+        .role(request.role())
         .build();
   }
 }

@@ -5,14 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
+@Builder
 public record OrderSearchRequest(
     @NotNull(message = ErrorMessage.MANDATORY)
     LocalDateTime fromDateTime,
     @NotNull(message = ErrorMessage.MANDATORY)
     LocalDateTime toDateTime
-) {
-
-  @Builder
-  public OrderSearchRequest {
-  }
-}
+) {}
