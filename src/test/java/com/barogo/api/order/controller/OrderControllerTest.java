@@ -102,14 +102,10 @@ class OrderControllerTest extends AbstractControllerTest implements OrderDataInt
   @Test
   void deliveryReadyList() throws Exception {
     // given
-    var request = OrderSearchRequest.builder()
-        .fromDateTime(LocalDateTime.now().minusDays(3L)).toDateTime(LocalDateTime.now())
-        .build();
-    given(orderService.deliveryReadyList(any(OrderSearchRequest.class))).willReturn(List.of(getOrderResponse()));
+    given(orderService.deliveryReadyList()).willReturn(List.of(getOrderResponse()));
     // when
     var perform = mvc.perform(get(BASE_URL + "/delivery-ready")
-        .contentType(CONTENT_TYPE)
-        .queryParams(toMap(request)));
+        .contentType(CONTENT_TYPE));
     // then
     perform.andExpect(STATUS_IS_OK);
   }

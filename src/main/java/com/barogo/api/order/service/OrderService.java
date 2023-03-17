@@ -11,6 +11,7 @@ import com.barogo.common.constant.ErrorCode;
 import com.barogo.common.exception.APIException;
 import com.barogo.common.exception.NotExistDataException;
 import com.barogo.common.security.SecurityUtil;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class OrderService {
   @Transactional(readOnly = true)
   public OrderResponse get(Long id) {
     return orderRepository.findById(id)
-        .orElseThrow(() -> new APIException(ErrorCode.NOT_EXIST_USER))
+        .orElseThrow(NotExistDataException::new)
         .toResponse();
   }
 
@@ -49,7 +50,7 @@ public class OrderService {
   public void update(Long id, OrderSaveRequest request) {
     var order = orderRepository.findById(id).orElseThrow(NotExistDataException::new);
     if (!order.isUpdatableAddress()) {
-      throw new APIException();
+      throw new APIException(ErrorCode.INVALID_STATUS_FOR_UPDATE_ADDRESS);
     }
     order.update(request);
   }
@@ -73,9 +74,10 @@ public class OrderService {
   }
 
   @Transactional(readOnly = true)
-  public List<OrderResponse> deliveryReadyList(OrderSearchRequest request) {
-    return orderRepository.findAllByDeliveryRequestedAtBetweenAndStatus(
-            request.fromDateTime(), request.toDateTime(), OrderStatus.DELIVERY_REQUESTED)
+  public List<OrderResponse> deliveryReadyList() {
+    var fromDateTime = LocalDate.now().minusDays(3L).atTime(0, 0);
+    return orderRepository.findAllByDeliveryRequestedAtGreaterThanEqualAndStatus(
+            fromDateTime, OrderStatus.DELIVERY_REQUESTED)
         .stream()
         .map(Order::toResponse)
         .toList();

@@ -58,8 +58,8 @@ public class OrderController {
 
   @PreAuthorize("hasRole('DELIVER')")
   @GetMapping("/delivery-ready")
-  public List<OrderResponse> deliveryReadyList(@Valid OrderSearchRequest request) {
-    return orderService.deliveryReadyList(request);
+  public List<OrderResponse> deliveryReadyList() {
+    return orderService.deliveryReadyList();
   }
 
   @PutMapping("/{id}/delivery-request")
