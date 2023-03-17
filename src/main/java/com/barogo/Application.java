@@ -13,10 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-public class DeliveryApplication {
+public class Application {
 
   public static void main(String[] args) {
-    var context = SpringApplication.run(DeliveryApplication.class, args);
+    var context = SpringApplication.run(Application.class, args);
 
     BCryptPasswordEncoder bCryptPasswordEncoder = (BCryptPasswordEncoder) context.getBean("bCryptPasswordEncoder");
     UserRepository userRepository = (UserRepository) context.getBean("userRepository");

@@ -39,7 +39,7 @@ public class OrderService {
 
   @Transactional(readOnly = true)
   public List<OrderResponse> list(OrderSearchRequest request) {
-    return orderRepository.findAllByDeliveryRequestedAtBetween(request.getFromDateTime(), request.getToDateTime())
+    return orderRepository.findAllByDeliveryRequestedAtBetween(request.fromDateTime(), request.toDateTime())
         .stream()
         .map(Order::toResponse)
         .toList();
@@ -75,7 +75,7 @@ public class OrderService {
   @Transactional(readOnly = true)
   public List<OrderResponse> deliveryReadyList(OrderSearchRequest request) {
     return orderRepository.findAllByDeliveryRequestedAtBetweenAndStatus(
-            request.getFromDateTime(), request.getToDateTime(), OrderStatus.DELIVERY_REQUESTED)
+            request.fromDateTime(), request.toDateTime(), OrderStatus.DELIVERY_REQUESTED)
         .stream()
         .map(Order::toResponse)
         .toList();

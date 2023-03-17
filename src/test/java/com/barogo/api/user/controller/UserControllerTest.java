@@ -36,7 +36,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
-        .queryParams(map(request)));
+        .content(toJson(request)));
     // then
     perform.andExpect(STATUS_IS_CREATED)
         .andExpect(result("1"));
@@ -50,7 +50,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(post(BASE_URL)
         .contentType(CONTENT_TYPE)
-        .queryParams(map(request)));
+        .content(toJson(request)));
     // then
     perform.andExpect(STATUS_IS_BAD_REQUEST);
   }
@@ -65,7 +65,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")
         .contentType(CONTENT_TYPE)
-        .queryParams(map(request)));
+        .queryParams(toMap(request)));
     // then
     perform
         .andExpect(STATUS_IS_UNPROCESSABLE_ENTITY)
@@ -82,7 +82,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")
         .contentType(CONTENT_TYPE)
-        .queryParams(map(request)));
+        .queryParams(toMap(request)));
     // then
     perform
         .andExpect(STATUS_IS_UNPROCESSABLE_ENTITY)
@@ -98,7 +98,7 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // when
     var perform = mvc.perform(get(BASE_URL + "/login")
         .contentType(CONTENT_TYPE)
-        .queryParams(map(request)));
+        .queryParams(toMap(request)));
     // then
     perform
         .andExpect(STATUS_IS_OK)
