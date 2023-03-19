@@ -1,11 +1,14 @@
 package com.barogo.common.config;
 
+import com.barogo.common.security.CustomAccessDeniedHandler;
+import com.barogo.common.security.CustomAuthenticationEntryPoint;
 import com.barogo.common.security.JwtFilter;
 import com.barogo.common.security.JwtTokenProvider;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
   private static final String[] permitAllEndpoints = {
@@ -27,7 +31,8 @@ public class SecurityConfig {
       "/v3/api-docs/**",
       "/actuator/**",
       "/users/**",
-      "/h2-console/**"
+      "/h2-console/**",
+      "/swagger-ui/**"
   };
 
   @Bean
@@ -37,16 +42,14 @@ public class SecurityConfig {
         .and().cors()
         .and().csrf().disable()
         .httpBasic().disable()
-
-//        .authorizeHttpRequests(authorize -> authorize
-//            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//            .requestMatchers(permitAllEndpoints).permitAll()
-//            .anyRequest().authenticated()
-//        )
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(permitAllEndpoints).permitAll()
+            .anyRequest().authenticated()
+        )
         .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        .and().exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
-//        .authenticationEntryPoint(customAuthenticationEntryPoint)
+        .and().exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
         .and().build();
   }
 

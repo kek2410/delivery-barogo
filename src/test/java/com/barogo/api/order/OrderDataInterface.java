@@ -8,7 +8,8 @@ public interface OrderDataInterface {
 
   default OrderSaveRequest saveOrderRequest() {
     return OrderSaveRequest.builder()
-        .address("서울시 어딘가")
+        .address("서울시 어딘가 서울대로1길")
+        .subAddress("1321호")
         .zipCode("12345")
         .build();
   }

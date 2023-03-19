@@ -40,7 +40,7 @@ public class OrderService {
 
   @Transactional(readOnly = true)
   public List<OrderResponse> list(OrderSearchRequest request) {
-    return orderRepository.findAllByDeliveryRequestedAtBetween(request.fromDateTime(), request.toDateTime())
+    return orderRepository.findAllByCreatedAtBetween(request.fromDateTime(), request.toDateTime())
         .stream()
         .map(Order::toResponse)
         .toList();

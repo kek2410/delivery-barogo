@@ -1,9 +1,12 @@
 package com.barogo.api.user.controller;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.barogo.AbstractControllerTest;
 import com.barogo.api.user.UserDataInterface;
@@ -13,10 +16,13 @@ import com.barogo.api.user.service.UserService;
 import com.barogo.common.constant.ErrorCode;
 import com.barogo.common.constant.ErrorMessage;
 import com.barogo.common.exception.APIException;
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(UserController.class)
 @DisplayName("사용자 컨트롤러")
@@ -40,6 +46,24 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     // then
     perform.andExpect(STATUS_IS_CREATED)
         .andExpect(result("1"));
+
+    perform.andDo(
+        MockMvcRestDocumentationWrapper.document(REST_PATH,
+            resource(
+                ResourceSnippetParameters.builder()
+                    .requestFields(
+                        fieldWithPath("userId").type(JsonFieldType.STRING).description("userId"),
+                        fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                        fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                        fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
+                        fieldWithPath("phone").type(JsonFieldType.STRING).description("phone"),
+                        fieldWithPath("role").type(JsonFieldType.STRING).description("role")
+                    )
+                    .build()
+            )
+        )
+    );
+
   }
 
   @DisplayName("사용자 등록 실패1")
@@ -103,6 +127,19 @@ class UserControllerTest extends AbstractControllerTest implements UserDataInter
     perform
         .andExpect(STATUS_IS_OK)
         .andExpect(result("testToken"));
+
+    perform.andDo(
+        MockMvcRestDocumentationWrapper.document(REST_PATH,
+            resource(
+                ResourceSnippetParameters.builder()
+                    .queryParameters(
+                        parameterWithName("userId").description("사용자 ID"),
+                        parameterWithName("password").description("사용자의 비밀번호")
+                    )
+                    .build()
+            )
+        )
+    );
   }
 
 }

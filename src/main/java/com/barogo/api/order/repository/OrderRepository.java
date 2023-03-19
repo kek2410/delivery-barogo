@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-  List<Order> findAllByDeliveryRequestedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);
+  List<Order> findAllByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
   List<Order> findAllByDeliveryRequestedAtGreaterThanEqualAndStatus(LocalDateTime fromDate, OrderStatus status);
 

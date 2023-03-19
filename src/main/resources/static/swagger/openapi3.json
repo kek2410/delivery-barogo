@@ -1,0 +1,392 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "delivery",
+    "description" : "Spring REST Docs 테스트 생성물 생성시 추가생성되는 OpenAPI 문서이용",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/deliveries/{id}" : {
+      "get" : {
+        "tags" : [ "deliveries" ],
+        "operationId" : "delivery-controller-test/get-by-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "배송 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/deliveries-id1538043102"
+                },
+                "examples" : {
+                  "delivery-controller-test/get-by-id" : {
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"status\" : \"READY\"\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deliveries/{id}/delivered" : {
+      "put" : {
+        "tags" : [ "deliveries" ],
+        "operationId" : "delivery-controller-test/set-delivered",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "배송 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200"
+          }
+        }
+      }
+    },
+    "/deliveries/{id}/delivering" : {
+      "put" : {
+        "tags" : [ "deliveries" ],
+        "operationId" : "delivery-controller-test/set-delivering",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "배송 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200"
+          }
+        }
+      }
+    },
+    "/deliveries/{id}/pick-up" : {
+      "put" : {
+        "tags" : [ "deliveries" ],
+        "operationId" : "delivery-controller-test/set-pickup",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "배송 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200"
+          }
+        }
+      }
+    },
+    "/orders" : {
+      "get" : {
+        "tags" : [ "orders" ],
+        "operationId" : "order-controller-test/get-list-all",
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/orders-1527341861"
+                },
+                "examples" : {
+                  "order-controller-test/get-list-all" : {
+                    "value" : "[ {\r\n  \"id\" : 1,\r\n  \"status\" : \"ORDERED\",\r\n  \"address\" : \"address\",\r\n  \"subAddress\" : \"subAddress\",\r\n  \"zipCode\" : \"zipCode\"\r\n} ]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "orders" ],
+        "operationId" : "order-controller-test/save-orders",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/orders2005462901"
+              },
+              "examples" : {
+                "order-controller-test/save-orders" : {
+                  "value" : "{\r\n  \"address\" : \"서울시 어딘가 서울대로1길\",\r\n  \"subAddress\" : \"1321호\",\r\n  \"zipCode\" : \"12345\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "201",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/users486549215"
+                },
+                "examples" : {
+                  "order-controller-test/save-orders" : {
+                    "value" : "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}" : {
+      "get" : {
+        "tags" : [ "orders" ],
+        "operationId" : "order-controller-test/get-by-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "주문 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/orders-id-1269399732"
+                },
+                "examples" : {
+                  "order-controller-test/get-by-id" : {
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"status\" : \"ORDERED\",\r\n  \"address\" : \"address\",\r\n  \"subAddress\" : \"subAddress\",\r\n  \"zipCode\" : \"zipCode\"\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "operationId" : "user-controller-test/save-user",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/users1297151085"
+              },
+              "examples" : {
+                "user-controller-test/save-user" : {
+                  "value" : "{\r\n  \"userId\" : \"jaein1234\",\r\n  \"name\" : \"ohjaein\",\r\n  \"password\" : \"Password1234!@#$\",\r\n  \"email\" : \"jaein@jaein.com\",\r\n  \"phone\" : \"010-1234-1234\",\r\n  \"role\" : \"ADMIN\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "201",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/users486549215"
+                },
+                "examples" : {
+                  "user-controller-test/save-user" : {
+                    "value" : "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "operationId" : "user-controller-test/find-user-by-id",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "사용자 ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "사용자의 비밀번호",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "text/plain;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/users486549215"
+                },
+                "examples" : {
+                  "user-controller-test/find-user-by-id" : {
+                    "value" : "testToken"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "deliveries-id1538043102" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number",
+            "description" : "배송 ID"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "배송 상태"
+          }
+        }
+      },
+      "orders-id-1269399732" : {
+        "type" : "object",
+        "properties" : {
+          "zipCode" : {
+            "type" : "string",
+            "description" : "우편번호"
+          },
+          "subAddress" : {
+            "type" : "string",
+            "description" : "배송 주소 추가정보"
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "배송 주소"
+          },
+          "id" : {
+            "type" : "number",
+            "description" : "주문 ID"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "주문 상태"
+          }
+        }
+      },
+      "orders-1527341861" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "properties" : {
+            "zipCode" : {
+              "type" : "string",
+              "description" : "우편번호"
+            },
+            "subAddress" : {
+              "type" : "string",
+              "description" : "배송 주소 추가정보"
+            },
+            "address" : {
+              "type" : "string",
+              "description" : "배송 주소"
+            },
+            "id" : {
+              "type" : "number",
+              "description" : "주문 ID"
+            },
+            "status" : {
+              "type" : "string",
+              "description" : "주문 상태"
+            }
+          }
+        }
+      },
+      "users1297151085" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "password"
+          },
+          "role" : {
+            "type" : "string",
+            "description" : "role"
+          },
+          "phone" : {
+            "type" : "string",
+            "description" : "phone"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "name"
+          },
+          "userId" : {
+            "type" : "string",
+            "description" : "userId"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "email"
+          }
+        }
+      },
+      "orders2005462901" : {
+        "type" : "object",
+        "properties" : {
+          "zipCode" : {
+            "type" : "string",
+            "description" : "우편번호"
+          },
+          "subAddress" : {
+            "type" : "string",
+            "description" : "주소 추가정보"
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "주소"
+          }
+        }
+      },
+      "users486549215" : {
+        "type" : "object"
+      }
+    }
+  }
+}
