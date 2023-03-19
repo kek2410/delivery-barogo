@@ -15,7 +15,6 @@ import com.barogo.api.order.OrderDataInterface;
 import com.barogo.api.order.dto.OrderSaveRequest;
 import com.barogo.api.order.dto.OrderSearchRequest;
 import com.barogo.api.order.service.OrderService;
-import com.epages.restdocs.apispec.FieldDescriptors;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.SimpleType;
 import java.time.LocalDateTime;
@@ -25,9 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @DisplayName("주문 컨트롤러 테스트")
 @WebMvcTest(OrderController.class)
+@WithMockUser(value = "customer", authorities = "CUSTOMER")
 class OrderControllerTest extends AbstractControllerTest implements OrderDataInterface {
 
   private static final String BASE_URL = "/orders";
@@ -157,6 +158,7 @@ class OrderControllerTest extends AbstractControllerTest implements OrderDataInt
 
   @DisplayName("배송준비 목록 조회")
   @Test
+  @WithMockUser(value = "deliver", authorities = "DELIVER")
   void deliveryReadyList() throws Exception {
     // given
     given(orderService.deliveryReadyList()).willReturn(List.of(getOrderResponse()));

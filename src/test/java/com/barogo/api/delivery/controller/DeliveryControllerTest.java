@@ -19,9 +19,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @DisplayName("배송 컨트롤러 테스트")
 @WebMvcTest(DeliveryController.class)
+@WithMockUser(authorities = "DELIVER")
 class DeliveryControllerTest extends AbstractControllerTest implements DeliveryDataInterface {
 
   private static final String BASE_URL = "/deliveries";

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -86,7 +87,7 @@ class OrderServiceTest implements OrderDataInterface {
   void getOrderList() {
     // given
     var request = OrderSearchRequest.builder().build();
-    given(orderRepository.findAllByDeliveryRequestedAtBetween(any(), any())).willReturn(
+    given(orderRepository.findAllByCreatedAtBetween(any(), any())).willReturn(
         List.of(Order.builder().build()));
     // when
     var result = orderService.list(request);
@@ -151,15 +152,14 @@ class OrderServiceTest implements OrderDataInterface {
   @DisplayName("배달준비상태 조회")
   @Test
   void deliveryReadyList() {
-    // given
-//    given(orderRepository.findAllByDeliveryRequestedAtGreaterThanEqualAndStatus(any(LocalDateTime.class),
-//        OrderStatus.DELIVERY_REQUESTED))
-//        .willReturn(List.of(Order.builder().id(1L).build()));
-//    // when
-//    var result = orderService.deliveryReadyList();
-//    // then
-//    assertNotNull(result);
-//    assertFalse(result.isEmpty());
+    given(orderRepository.findAllByDeliveryRequestedAtGreaterThanEqualAndStatus(any(LocalDateTime.class),
+        eq(OrderStatus.DELIVERY_REQUESTED)))
+        .willReturn(List.of(Order.builder().id(1L).build()));
+    // when
+    var result = orderService.deliveryReadyList();
+    // then
+    assertNotNull(result);
+    assertFalse(result.isEmpty());
   }
 
 }
